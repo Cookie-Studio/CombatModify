@@ -1,0 +1,7 @@
+
+name: CombatModify
+main: me.liuli.cm.CombatModify
+version: "1.0"
+author: liulihaocai
+api: ["1.0.0"]
+description: LOL
