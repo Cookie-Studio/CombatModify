@@ -8,9 +8,10 @@ import java.nio.charset.StandardCharsets;
 
 public class CombatModify extends PluginBase {
     public static int attackCD=1;
-    public static float baseKB=1;
-    public static float horizontalKB_OG=1,verticalKB_OG=1;
+    public static float baseKB=1F; // ticks
+    public static float horizontalKB_OG=1F,verticalKB_OG=1F;
     public static float horizontalKB=0.5F,verticalKB=0.5F;
+    public static float heightLimit=2F,overheightReduce=1F;
 
     @Override
     public void onEnable() {
@@ -24,7 +25,9 @@ public class CombatModify extends PluginBase {
                         "hkb_g: 1\n"+
                         "vkb_g: 1\n"+
                         "hkb: 0.5\n"+
-                        "vkb: 0.5");
+                        "vkb: 0.5\n"+
+                        "heightlimit: 2\n"+
+                        "overheight_reduce: 1");
                 writer.close();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -37,6 +40,8 @@ public class CombatModify extends PluginBase {
         verticalKB_OG= (float) config.getDouble("vkb_g");
         horizontalKB= (float) config.getDouble("hkb");
         verticalKB= (float) config.getDouble("vkb");
+        heightLimit=(float)config.getDouble("heightlimit");
+        overheightReduce=(float)config.getDouble("overheight_reduce");
         this.getServer().getPluginManager().registerEvents(new EventListener(), this);
     }
 }
