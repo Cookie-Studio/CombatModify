@@ -8,9 +8,10 @@ import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityMotionEvent;
 import me.liuli.cm.api.BaseKBEvent;
 import me.liuli.cm.api.KBEvent;
+import me.liuli.cm.utils.MotionUtils;
 
 public class EventListener implements Listener {
-    private Server server=Server.getInstance();
+    private final Server server=Server.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
@@ -30,7 +31,14 @@ public class EventListener implements Listener {
         if(event.getEntity().isOnGround()){
             kbEvent=new KBEvent(CombatModify.horizontalKB_OG,CombatModify.verticalKB_OG,CombatModify.horizontalKB_OG);
         }else{
-            kbEvent=new KBEvent(CombatModify.horizontalKB,CombatModify.verticalKB,CombatModify.horizontalKB);
+            double height=MotionUtils.calcGround(event.getEntity());
+            if(height>CombatModify.heightLimit){
+                double pct=(CombatModify.overheightReduce-(height-CombatModify.heightLimit))/CombatModify.overheightReduce;
+                double hor=CombatModify.doReduceHorizonal?CombatModify.horizontalKB*pct:CombatModify.horizontalKB;
+                kbEvent=new KBEvent(hor,CombatModify.verticalKB*pct,hor);
+            }else{
+                kbEvent=new KBEvent(CombatModify.horizontalKB,CombatModify.verticalKB,CombatModify.horizontalKB);
+            }
         }
 
         server.getPluginManager().callEvent(kbEvent);
